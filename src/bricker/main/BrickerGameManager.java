@@ -95,6 +95,7 @@ public class BrickerGameManager extends GameManager {
 
     }
 
+    // bui
     private void buildBrick(Vector2 topLeftCorner, Vector2 brickDimension, ImageReader imageReader, Vector2 windowDimension) {
         GameObjectCollection gameObjectCollection = this.gameObjects();
         BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection);
