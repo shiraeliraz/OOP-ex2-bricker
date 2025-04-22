@@ -4,6 +4,7 @@ import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Brick;
+import bricker.gameobjects.LifeHandler;
 import bricker.gameobjects.Paddle;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -32,6 +33,7 @@ public class BrickerGameManager extends GameManager {
     private Vector2 windowDimensions;
     private Ball ball;
     private WindowController windowController;
+    private LifeHandler lifeHandler;
 
     private int remainingLives = 3;
 
@@ -82,6 +84,9 @@ public class BrickerGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         this.windowController = windowController;
+        lifeHandler = new LifeHandler(this.gameObjects(), remainingLives,imageReader, windowDimensions.y());
+        lifeHandler.createAllHearts();
+        lifeHandler.setLives(remainingLives);
 
         // creating ball
         createBall(imageReader, soundReader);
@@ -171,6 +176,7 @@ public class BrickerGameManager extends GameManager {
                 float ballHeight = ball.getCenter().y();
                 if (ballHeight > windowDimensions.y()) {
                     remainingLives--;
+                    lifeHandler.setLives(remainingLives);
                     initBall();
                 }
             }
