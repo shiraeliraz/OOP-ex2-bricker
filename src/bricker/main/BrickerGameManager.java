@@ -32,7 +32,7 @@ public class BrickerGameManager extends GameManager {
     private Ball ball;
     private WindowController windowController;
 
-    private static int remainingLives = 3;
+    private int remainingLives = 3;
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
         super(windowTitle, windowDimensions);
@@ -81,40 +81,60 @@ public class BrickerGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         this.windowController = windowController;
+
         // creating ball
-        Renderable ballImage =
-        imageReader.readImage("assets/ball.png", true);
-        Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        this.ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
+        createBall(imageReader, soundReader);
         initBall();
         //creating background
-        Renderable backGroundImage =
-                imageReader.readImage("assets/DARK_BG2_small.jpeg", false);
-        GameObject background =
-                new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), windowDimensions.y()), backGroundImage);
-        this.gameObjects().addGameObject(background, Layer.BACKGROUND);
-        background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+        createBackground(imageReader);
 
         // creating paddle
-        Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
-        Paddle paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener, windowDimensions);
-        paddle.setCenter(new Vector2(windowDimensions.x() / 2, windowDimensions.y() - 30));
-        this.gameObjects().addGameObject(paddle);
-        createWalls(windowDimensions);
-
-
+        createPaddle(imageReader, inputListener);
 
         // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
         BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection);
 
         //Place all bricks
+        placeBricks(imageReader, basicCollisionStrategy);
+
+        // create heart
+
+
+    }
+
+
+
+    private void createBall(ImageReader imageReader, SoundReader soundReader) {
+        Renderable ballImage =
+        imageReader.readImage("assets/ball.png", true);
+        Sound collisionSound = soundReader.readSound("assets/blop.wav");
+        this.ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
+    }
+
+    private void createBackground(ImageReader imageReader) {
+        Renderable backGroundImage =
+                imageReader.readImage("assets/DARK_BG2_small.jpeg", false);
+        GameObject background =
+                new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), windowDimensions.y()), backGroundImage);
+        this.gameObjects().addGameObject(background, Layer.BACKGROUND);
+        background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+    }
+
+    private void placeBricks(ImageReader imageReader, BasicCollisionStrategy basicCollisionStrategy) {
         int y = GAP_WIDTH+WALL_WIDTH;
         for (int i = 0; i < numberOfRows; i++) {
             placeRow(imageReader, basicCollisionStrategy,y);
             y+=BRICK_HEIGHT+GAP_WIDTH;
         }
+    }
 
+    private void createPaddle(ImageReader imageReader, UserInputListener inputListener) {
+        Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
+        Paddle paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener, windowDimensions);
+        paddle.setCenter(new Vector2(windowDimensions.x() / 2, windowDimensions.y() - 30));
+        this.gameObjects().addGameObject(paddle);
+        createWalls(windowDimensions);
     }
 
     private void initBall() {
@@ -138,18 +158,20 @@ public class BrickerGameManager extends GameManager {
         super.update(deltaTime);
         if (remainingLives == 0) {
             if (windowController.openYesNoDialog(LOSE_MESSAGE)){
+                remainingLives = 3;
                 windowController.resetGame();
             }
-            else{
+            else {
                 windowController.closeWindow();
             }
 
-        }
-        if (ball!=null){
-            float ballHeight = ball.getCenter().y();
-            if (ballHeight > windowDimensions.y()) {
-                remainingLives--;
-                initBall();
+        } else {
+            if (ball != null) {
+                float ballHeight = ball.getCenter().y();
+                if (ballHeight > windowDimensions.y()) {
+                    remainingLives--;
+                    initBall();
+                }
             }
         }
     }
