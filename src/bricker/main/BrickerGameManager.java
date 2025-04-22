@@ -25,9 +25,14 @@ public class BrickerGameManager extends GameManager {
     private static final int GAP_WIDTH = 4;
     private static final int BRICK_HEIGHT = 15;
     private static final int WALL_WIDTH = 5;
+    private static final String LOSE_MESSAGE = "You lose! Play again?";
     private int numberOfRows = 7;
     private int numberOfColumns = 8;
     private Vector2 windowDimensions;
+    private Ball ball;
+    private WindowController windowController;
+
+    private static int remainingLives = 3;
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
         super(windowTitle, windowDimensions);
@@ -60,11 +65,9 @@ public class BrickerGameManager extends GameManager {
         float brickWidth = (windowDimensions.x() - WALL_WIDTH*2-(numberOfColumns+1)*GAP_WIDTH) / numberOfColumns;
         Vector2 topLeftCorner = new Vector2(WALL_WIDTH+GAP_WIDTH, y+WALL_WIDTH+GAP_WIDTH);
         Vector2 brickDimensions = new Vector2(brickWidth, 15);
-        System.out.println("brickDimensions: " + brickDimensions);
         for (int i = 0; i < numberOfColumns; i++) {
             createSingleBrick(topLeftCorner, brickDimensions,imageReader, collisionStrategy);
             topLeftCorner = topLeftCorner.add(new Vector2(brickWidth+GAP_WIDTH, 0));
-            System.out.println("Created brick " + i);
         }
     }
 
@@ -77,39 +80,27 @@ public class BrickerGameManager extends GameManager {
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+        this.windowController = windowController;
         // creating ball
         Renderable ballImage =
         imageReader.readImage("assets/ball.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        Ball ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
-        Vector2 windowDimension = windowController.getWindowDimensions();
-        ball.setCenter(windowDimension.mult(0.5f));
-        this.gameObjects().addGameObject(ball);
-//        ball.setVelocity(Vector2.DOWN.mult());
-        Random random = new Random();
-        float ballVelX = BALL_SPEED;
-        float ballVelY = BALL_SPEED;
-        if (random.nextBoolean()) {
-            ballVelX *= -1;
-        }
-        if (random.nextBoolean()) {
-            ballVelY *= -1;
-        }
-        ball.setVelocity(new Vector2(ballVelX, ballVelY));
+        this.ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
+        initBall();
         //creating background
         Renderable backGroundImage =
                 imageReader.readImage("assets/DARK_BG2_small.jpeg", false);
         GameObject background =
-                new GameObject(Vector2.ZERO, new Vector2(windowDimension.x(), windowDimension.y()), backGroundImage);
+                new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), windowDimensions.y()), backGroundImage);
         this.gameObjects().addGameObject(background, Layer.BACKGROUND);
         background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
 
         // creating paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
-        Paddle paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener, windowDimension);
-        paddle.setCenter(new Vector2(windowDimension.x() / 2, windowDimension.y() - 30));
+        Paddle paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener, windowDimensions);
+        paddle.setCenter(new Vector2(windowDimensions.x() / 2, windowDimensions.y() - 30));
         this.gameObjects().addGameObject(paddle);
-        createWalls(windowDimension);
+        createWalls(windowDimensions);
 
 
 
@@ -124,6 +115,43 @@ public class BrickerGameManager extends GameManager {
             y+=BRICK_HEIGHT+GAP_WIDTH;
         }
 
+    }
+
+    private void initBall() {
+        ball.setCenter(windowDimensions.mult(0.5f));
+        this.gameObjects().addGameObject(ball);
+
+        Random random = new Random();
+        float ballVelX = BALL_SPEED;
+        float ballVelY = BALL_SPEED;
+        if (random.nextBoolean()) {
+            ballVelX *= -1;
+        }
+        if (random.nextBoolean()) {
+            ballVelY *= -1;
+        }
+        ball.setVelocity(new Vector2(ballVelX, ballVelY));
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        if (remainingLives == 0) {
+            if (windowController.openYesNoDialog(LOSE_MESSAGE)){
+                windowController.resetGame();
+            }
+            else{
+                windowController.closeWindow();
+            }
+
+        }
+        if (ball!=null){
+            float ballHeight = ball.getCenter().y();
+            if (ballHeight > windowDimensions.y()) {
+                remainingLives--;
+                initBall();
+            }
+        }
     }
 
     public static void main(String[] args) {
