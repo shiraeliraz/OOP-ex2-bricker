@@ -135,7 +135,7 @@ public class BrickerGameManager extends GameManager {
         } else {
             gameManager = new BrickerGameManager("Bricker", new Vector2(700, 500));
         }
-        gameManager.run();
+        gameManager.run();  // run game
 
     }
 }
