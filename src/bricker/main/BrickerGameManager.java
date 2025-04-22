@@ -127,7 +127,14 @@ public class BrickerGameManager extends GameManager {
     }
 
     public static void main(String[] args) {
-        BrickerGameManager gameManager = new BrickerGameManager("Bricker", new Vector2(700,500));
+        BrickerGameManager gameManager;
+        if (args.length == 2) {
+            int rows = Integer.parseInt(args[0]);
+            int cols = Integer.parseInt(args[1]);
+            gameManager = new BrickerGameManager("Bricker", new Vector2(700,500), rows, cols);
+        } else {
+            gameManager = new BrickerGameManager("Bricker", new Vector2(700, 500));
+        }
         gameManager.run();
 
     }
