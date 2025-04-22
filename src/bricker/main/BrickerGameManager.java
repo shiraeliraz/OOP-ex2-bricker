@@ -1,12 +1,12 @@
 package bricker.main;
 
 import bricker.gameobjects.Ball;
+import bricker.gameobjects.Paddle;
 import danogl.GameManager;
 import danogl.GameObject;
-import danogl.gui.ImageReader;
-import danogl.gui.SoundReader;
-import danogl.gui.UserInputListener;
-import danogl.gui.WindowController;
+import danogl.collisions.Layer;
+import danogl.components.CoordinateSpace;
+import danogl.gui.*;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
@@ -30,24 +30,33 @@ public class BrickerGameManager extends GameManager {
 
         GameObject ceiling = new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), 5), rectangle);
         this.gameObjects().addGameObject(ceiling);
+
     }
 
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+        // creating ball
         Renderable ballImage =
         imageReader.readImage("assets/ball.png", true);
-
-        // creating ball
-        Ball ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage );
+        Sound collisionSound = soundReader.readSound("assets/blop.wav");
+        Ball ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
         Vector2 windowDimension = windowController.getWindowDimensions();
         ball.setCenter(windowDimension.mult(0.5f));
         this.gameObjects().addGameObject(ball);
         ball.setVelocity(Vector2.DOWN.mult(100));
 
+        //creating background
+        Renderable backGroundImage =
+                imageReader.readImage("assets/DARK_BG2_small.jpeg", false);
+        GameObject background =
+                new GameObject(Vector2.ZERO, new Vector2(windowDimension.x(), windowDimension.y()), backGroundImage);
+        this.gameObjects().addGameObject(background, Layer.BACKGROUND);
+        background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+
         // creating paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
-        GameObject paddle = new GameObject(Vector2.ZERO, new Vector2(100, 15), paddleImage);
+        Paddle paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener);
         paddle.setCenter(new Vector2(windowDimension.x() / 2, windowDimension.y() - 30));
         this.gameObjects().addGameObject(paddle);
         createWalls(windowDimension);
