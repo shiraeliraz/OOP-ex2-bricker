@@ -33,6 +33,7 @@ public class Paddle extends GameObject {
         super.update(deltaTime);
         Vector2 movementDir = Vector2.ZERO;
         if (getTopLeftCorner().x() <= LEFT_BORDER_X_AXIS){
+            this.setCenter(new Vector2(350,  470));
             return;
         }
         if (inputListener.isKeyPressed(KeyEvent.VK_LEFT)){
