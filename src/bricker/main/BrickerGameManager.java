@@ -29,6 +29,7 @@ public class BrickerGameManager extends GameManager {
         super(windowTitle, windowDimensions);
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
+
     }
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions) {
@@ -92,13 +93,14 @@ public class BrickerGameManager extends GameManager {
 
 
 
-        // creating a brick
+    }
+
+    private void buildBrick(Vector2 topLeftCorner, Vector2 brickDimension, ImageReader imageReader, Vector2 windowDimension) {
         GameObjectCollection gameObjectCollection = this.gameObjects();
         BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection);
         Renderable brickImage = imageReader.readImage("assets/brick.png", false);
-        Brick brick = new Brick(Vector2.ZERO.add(new Vector2(7, 7)), new Vector2(windowDimension.x() - 30, 15f), brickImage, basicCollisionStrategy);
+        Brick brick = new Brick(topLeftCorner, brickDimension, brickImage, basicCollisionStrategy);
         this.gameObjects().addGameObject(brick);
-
     }
 
     public static void main(String[] args) {
