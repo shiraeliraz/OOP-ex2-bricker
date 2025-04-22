@@ -22,17 +22,24 @@ public class BrickerGameManager extends GameManager {
 
 
     private static final float BALL_SPEED = 150f;
+    private static final int GAP_WIDTH = 4;
+    private static final int BRICK_HEIGHT = 15;
+    private static final int WALL_WIDTH = 5;
     private int numberOfRows = 7;
     private int numberOfColumns = 8;
+    private Vector2 windowDimensions;
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
         super(windowTitle, windowDimensions);
+        this.windowDimensions = windowDimensions;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
     }
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions) {
         super(windowTitle, windowDimensions);
+        this.windowDimensions = windowDimensions;
+
     }
 
     public void createWalls(Vector2 windowDimensions) {
@@ -41,16 +48,30 @@ public class BrickerGameManager extends GameManager {
         GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(5, windowDimensions.y()), rectangle);
         this.gameObjects().addGameObject(leftWall);
 
-        GameObject rightWall = new GameObject(new Vector2(windowDimensions.x() - 5, 0), new Vector2(5, windowDimensions.y()), rectangle);
+        GameObject rightWall = new GameObject(new Vector2(windowDimensions.x() - WALL_WIDTH, 0), new Vector2(WALL_WIDTH, windowDimensions.y()), rectangle);
         this.gameObjects().addGameObject(rightWall);
 
-        GameObject ceiling = new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), 5), rectangle);
+        GameObject ceiling = new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), (float)WALL_WIDTH), rectangle);
         this.gameObjects().addGameObject(ceiling);
 
     }
 
-    private void placeRow() {
+    private void placeRow(ImageReader imageReader, CollisionStrategy collisionStrategy, float y) {
+        float brickWidth = (windowDimensions.x() - WALL_WIDTH*2-(numberOfColumns+1)*GAP_WIDTH) / numberOfColumns;
+        Vector2 topLeftCorner = new Vector2(WALL_WIDTH+GAP_WIDTH, y+WALL_WIDTH+GAP_WIDTH);
+        Vector2 brickDimensions = new Vector2(brickWidth, 15);
+        System.out.println("brickDimensions: " + brickDimensions);
+        for (int i = 0; i < numberOfColumns; i++) {
+            createSingleBrick(topLeftCorner, brickDimensions,imageReader, collisionStrategy);
+            topLeftCorner = topLeftCorner.add(new Vector2(brickWidth+GAP_WIDTH, 0));
+            System.out.println("Created brick " + i);
+        }
+    }
 
+    private void createSingleBrick(Vector2 topLeftCorner, Vector2 brickDimensions, ImageReader imageReader, CollisionStrategy collisionStrategy) {
+        Renderable brickImage = imageReader.readImage("assets/brick.png", false);
+        Brick brick = new Brick(topLeftCorner, brickDimensions, brickImage, collisionStrategy);
+        this.gameObjects().addGameObject(brick);
     }
 
     @Override
@@ -92,12 +113,16 @@ public class BrickerGameManager extends GameManager {
 
 
 
-        // creating a brick
+        // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
         BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection);
-        Renderable brickImage = imageReader.readImage("assets/brick.png", false);
-        Brick brick = new Brick(Vector2.ZERO.add(new Vector2(7, 7)), new Vector2(windowDimension.x() - 30, 15f), brickImage, basicCollisionStrategy);
-        this.gameObjects().addGameObject(brick);
+
+        //Place all bricks
+        int y = GAP_WIDTH+WALL_WIDTH;
+        for (int i = 0; i < numberOfRows; i++) {
+            placeRow(imageReader, basicCollisionStrategy,y);
+            y+=BRICK_HEIGHT+GAP_WIDTH;
+        }
 
     }
 
