@@ -19,7 +19,7 @@ public class Ball extends GameObject {
      * @param dimensions     Width and height in window coordinates.
      * @param renderable     The renderable representing the object. Can be null, in which case
      *                       the GameObject will not be rendered.
-     * @param collisionSound
+     * @param collisionSound The collision sound of the ball
      */
     public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound) {
         super(topLeftCorner, dimensions, renderable);
