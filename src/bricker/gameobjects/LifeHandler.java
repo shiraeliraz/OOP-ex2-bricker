@@ -41,7 +41,7 @@ public class LifeHandler {
         textRenderable.setString(Integer.toString(lives));
         textRenderable.setColor(colorChooser());
         GameObject number = new GameObject(new Vector2(10,  - 30), new Vector2(20, 20), textRenderable);
-        this.gameObjectCollection.addGameObject(number);
+        this.gameObjectCollection.addGameObject(number); //
     }
 
     private void createSingleHeart(Vector2 topLeftCorner, Vector2 heartDimensions) {
