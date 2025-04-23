@@ -54,7 +54,7 @@ public class LifeHandler {
     }
 
     public void createAllHearts() {
-        Vector2 topLeftCorner = new Vector2(44, height-30);
+        Vector2 topLeftCorner = new Vector2(40, height-30);
         Vector2 heartDimensions = new Vector2(20, 20);
         for (int i = 0; i < lives; i++) {
             hearts[i] = createSingleHeart(topLeftCorner, heartDimensions);
