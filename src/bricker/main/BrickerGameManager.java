@@ -15,7 +15,10 @@ import danogl.gui.*;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.gui.rendering.TextRenderable;
+import danogl.util.Counter;
 import danogl.util.Vector2;
+
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 import java.awt.*;
@@ -28,13 +31,15 @@ public class BrickerGameManager extends GameManager {
     private static final int BRICK_HEIGHT = 15;
     private static final int WALL_WIDTH = 5;
     private static final String LOSE_MESSAGE = "You lose! Play again?";
+    private static final String WIN_MESSAGE = "You win! Play again?";
     private int numberOfRows = 7;
     private int numberOfColumns = 8;
     private Vector2 windowDimensions;
     private Ball ball;
     private WindowController windowController;
+    private UserInputListener inputListener;
     private LifeHandler lifeHandler;
-
+    private Counter brickCounter = new Counter(0);
     private int remainingLives = 3;
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
@@ -71,6 +76,7 @@ public class BrickerGameManager extends GameManager {
         for (int i = 0; i < numberOfColumns; i++) {
             createSingleBrick(topLeftCorner, brickDimensions,imageReader, collisionStrategy);
             topLeftCorner = topLeftCorner.add(new Vector2(brickWidth+GAP_WIDTH, 0));
+            brickCounter.increment();
         }
     }
 
@@ -87,6 +93,7 @@ public class BrickerGameManager extends GameManager {
         lifeHandler = new LifeHandler(this.gameObjects(), remainingLives,imageReader, windowDimensions.y());
         lifeHandler.createAllHearts();
         lifeHandler.setLives(remainingLives);
+        this.inputListener = inputListener;
 
         // creating ball
         createBall(imageReader, soundReader);
@@ -99,7 +106,7 @@ public class BrickerGameManager extends GameManager {
 
         // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
-        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection);
+        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
 
         //Place all bricks
         placeBricks(imageReader, basicCollisionStrategy);
@@ -162,14 +169,11 @@ public class BrickerGameManager extends GameManager {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        if (brickCounter.value() == 0 || inputListener.isKeyPressed(KeyEvent.VK_W)) {
+            playAgain(WIN_MESSAGE);
+        }
         if (remainingLives == 0) {
-            if (windowController.openYesNoDialog(LOSE_MESSAGE)){
-                remainingLives = 3;
-                windowController.resetGame();
-            }
-            else {
-                windowController.closeWindow();
-            }
+            playAgain(LOSE_MESSAGE);
 
         } else {
             if (ball != null) {
@@ -180,6 +184,18 @@ public class BrickerGameManager extends GameManager {
                     initBall();
                 }
             }
+        }
+    }
+
+    private void playAgain(String message) {
+        if (windowController.openYesNoDialog(message)){
+            remainingLives = 3;
+            windowController.resetGame();
+            brickCounter = new Counter(0);
+
+        }
+        else {
+            windowController.closeWindow();
         }
     }
 
