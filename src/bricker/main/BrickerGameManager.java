@@ -171,8 +171,7 @@ public class BrickerGameManager extends GameManager {
         super.update(deltaTime);
         if (brickCounter.value() == 0 || inputListener.isKeyPressed(KeyEvent.VK_W)) {
             playAgain(WIN_MESSAGE);
-        }
-        if (remainingLives == 0) {
+        } else if (remainingLives == 0) {
             playAgain(LOSE_MESSAGE);
 
         } else {
