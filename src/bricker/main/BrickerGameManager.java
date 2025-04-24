@@ -168,9 +168,22 @@ public class BrickerGameManager extends GameManager {
         ball.setVelocity(new Vector2(ballVelX, ballVelY));
     }
 
+    private void removeElementsOutOfBound() {
+        for (GameObject gameObject : gameObjects()) {
+            if (gameObject == ball) {
+                continue;
+            }
+            float height = gameObject.getCenter().y();
+            if (height > windowDimensions.y()) {
+                this.gameObjects().removeGameObject(gameObject);
+            }
+        }
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        removeElementsOutOfBound();
         if (brickCounter.value() == 0 || inputListener.isKeyPressed(KeyEvent.VK_W)) {
             playAgain(WIN_MESSAGE);
         } else if (remainingLives == 0) {

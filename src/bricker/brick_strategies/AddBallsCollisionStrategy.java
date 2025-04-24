@@ -18,6 +18,7 @@ public class AddBallsCollisionStrategy implements CollisionStrategy{
     private final SoundReader soundReader;
     private final Random random = new Random();
     private final int BALL_SPEED = 200; // TODO: maybe same speed as reg ball?
+    private final Vector2 puckDimensions = new Vector2(15, 15);
 
     public AddBallsCollisionStrategy(GameObjectCollection gameObjectCollection, ImageReader imageReader, SoundReader soundReader) {
         this.gameObjectCollection = gameObjectCollection;
@@ -28,7 +29,7 @@ public class AddBallsCollisionStrategy implements CollisionStrategy{
     private void createPuck(Vector2 topLeftCorner) {
         Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        Ball ball = new Ball(topLeftCorner, new Vector2(15, 15), puckImage, collisionSound);
+        Ball ball = new Ball(topLeftCorner, puckDimensions, puckImage, collisionSound);
         gameObjectCollection.addGameObject(ball);
         initPuck(ball);
     }
