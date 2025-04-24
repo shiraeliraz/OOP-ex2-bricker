@@ -108,12 +108,10 @@ public class BrickerGameManager extends GameManager {
         // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
 //        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
-        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader);
+        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
         //Place all bricks
 //        placeBricks(imageReader, basicCollisionStrategy);
         placeBricks(imageReader, addBallsCollisionStrategy);
-
-        // create heart
 
 
     }

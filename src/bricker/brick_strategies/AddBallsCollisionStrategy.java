@@ -7,23 +7,27 @@ import danogl.gui.ImageReader;
 import danogl.gui.Sound;
 import danogl.gui.SoundReader;
 import danogl.gui.rendering.Renderable;
+import danogl.util.Counter;
 import danogl.util.Vector2;
 
 import java.util.Random;
 
-public class AddBallsCollisionStrategy implements CollisionStrategy{
+public class AddBallsCollisionStrategy extends BasicCollisionStrategy{
 
     private final GameObjectCollection gameObjectCollection;
     private final ImageReader imageReader;
     private final SoundReader soundReader;
+    private final Counter counter;
     private final Random random = new Random();
     private final int BALL_SPEED = 200; // TODO: maybe same speed as reg ball?
     private final Vector2 puckDimensions = new Vector2(15, 15);
 
-    public AddBallsCollisionStrategy(GameObjectCollection gameObjectCollection, ImageReader imageReader, SoundReader soundReader) {
+    public AddBallsCollisionStrategy(GameObjectCollection gameObjectCollection, ImageReader imageReader, SoundReader soundReader, Counter counter) {
+        super(gameObjectCollection, counter);
         this.gameObjectCollection = gameObjectCollection;
         this.imageReader = imageReader;
         this.soundReader = soundReader;
+        this.counter = counter;
     }
 
     private void createPuck(Vector2 topLeftCorner) {
@@ -43,10 +47,10 @@ public class AddBallsCollisionStrategy implements CollisionStrategy{
 
     @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
+        super.onCollision(gameObject1, gameObject2);
+        System.out.println("create puck");
         Vector2 puckTopLeftCorner = gameObject1.getCenter();
-        gameObjectCollection.removeGameObject(gameObject1);
         createPuck(puckTopLeftCorner);
         createPuck(puckTopLeftCorner);
-
     }
 }

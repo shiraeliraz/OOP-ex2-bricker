@@ -16,7 +16,8 @@ public class BasicCollisionStrategy implements CollisionStrategy {
     @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
         System.out.println(COLLISION_MESSAGE);
-        gameObjectCollection.removeGameObject(gameObject1);
-        brickCounter.decrement();
+        if (gameObjectCollection.removeGameObject(gameObject1)) {
+            brickCounter.decrement();
+        }
     }
 }

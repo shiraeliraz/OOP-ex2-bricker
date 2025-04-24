@@ -25,7 +25,6 @@ public class Paddle extends GameObject {
      */
     public Paddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, UserInputListener inputListener, Vector2 windowDimensions) {
         super(topLeftCorner, dimensions, renderable);
-
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
     }
