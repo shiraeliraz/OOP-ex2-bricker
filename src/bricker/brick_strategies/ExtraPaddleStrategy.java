@@ -26,7 +26,9 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
         this.imageReader = imageReader;
     }
 
+    @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
+        super.onCollision(gameObject1, gameObject2);
         Vector2 extraPaddleCenter = new Vector2(windowDimensions.x() / 2, windowDimensions.y() / 2);
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
         ExtraPaddle extraPaddle = new ExtraPaddle(Vector2.ZERO, PADDLE_DIMENSIONS, paddleImage, inputListener, windowDimensions, gameObjectCollection);
