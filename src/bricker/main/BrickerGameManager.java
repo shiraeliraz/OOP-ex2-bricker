@@ -1,5 +1,6 @@
 package bricker.main;
 
+import bricker.brick_strategies.AddBallsCollisionStrategy;
 import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.gameobjects.Ball;
@@ -106,10 +107,11 @@ public class BrickerGameManager extends GameManager {
 
         // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
-        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
-
+//        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
+        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader);
         //Place all bricks
-        placeBricks(imageReader, basicCollisionStrategy);
+//        placeBricks(imageReader, basicCollisionStrategy);
+        placeBricks(imageReader, addBallsCollisionStrategy);
 
         // create heart
 
@@ -134,10 +136,10 @@ public class BrickerGameManager extends GameManager {
         background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
     }
 
-    private void placeBricks(ImageReader imageReader, BasicCollisionStrategy basicCollisionStrategy) {
+    private void placeBricks(ImageReader imageReader, CollisionStrategy CollisionStrategy) {
         int y = GAP_WIDTH+WALL_WIDTH;
         for (int i = 0; i < numberOfRows; i++) {
-            placeRow(imageReader, basicCollisionStrategy,y);
+            placeRow(imageReader, CollisionStrategy,y);
             y+=BRICK_HEIGHT+GAP_WIDTH;
         }
     }
