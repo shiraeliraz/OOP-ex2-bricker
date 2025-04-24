@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 public class Paddle extends GameObject {
 
     private static final float MOVEMENT_SPEED = 300f;
+    private final static String PADDLE_TAG = "paddle";
     private static final int WALL_WIDTH = 5 ;
     private final UserInputListener inputListener;
     private final Vector2 windowDimensions;
@@ -27,6 +28,7 @@ public class Paddle extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
+        this.setTag(PADDLE_TAG);
     }
 
     @Override

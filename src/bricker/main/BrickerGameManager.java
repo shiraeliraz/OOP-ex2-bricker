@@ -3,6 +3,7 @@ package bricker.main;
 import bricker.brick_strategies.AddBallsCollisionStrategy;
 import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
+import bricker.brick_strategies.ExtraLifeStrategy;
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Brick;
 import bricker.gameobjects.LifeHandler;
@@ -54,6 +55,16 @@ public class BrickerGameManager extends GameManager {
         super(windowTitle, windowDimensions);
         this.windowDimensions = windowDimensions;
 
+    }
+    public void setRemainingLives(int remainingLives) {
+        this.remainingLives = remainingLives;
+    }
+    public int getLives(){
+        return remainingLives;
+    }
+
+    public LifeHandler getLifeHandler() {
+        return lifeHandler;
     }
 
     public void createWalls(Vector2 windowDimensions) {
@@ -111,8 +122,9 @@ public class BrickerGameManager extends GameManager {
         AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
         //Place all bricks
 //        placeBricks(imageReader, basicCollisionStrategy);
-        placeBricks(imageReader, addBallsCollisionStrategy);
 
+        ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
+        placeBricks(imageReader, extraLifeStrategy);
 
     }
 
@@ -181,6 +193,9 @@ public class BrickerGameManager extends GameManager {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        if (remainingLives != lifeHandler.getLives()) {
+            remainingLives = lifeHandler.getLives();
+        }
         removeElementsOutOfBound();
         if (brickCounter.value() == 0 || inputListener.isKeyPressed(KeyEvent.VK_W)) {
             playAgain(WIN_MESSAGE);
@@ -197,6 +212,7 @@ public class BrickerGameManager extends GameManager {
                 }
             }
         }
+        destroyObjectsNotOnScreen();
     }
 
     private void playAgain(String message) {
@@ -208,6 +224,13 @@ public class BrickerGameManager extends GameManager {
         }
         else {
             windowController.closeWindow();
+        }
+    }
+    private void destroyObjectsNotOnScreen() {
+        for (GameObject gameObject : gameObjects()) {
+            if (gameObject.getTopLeftCorner().y() > windowDimensions.y() ) {
+                gameObjects().removeGameObject(gameObject);
+            }
         }
     }
 

@@ -17,6 +17,7 @@ public class LifeHandler {
     private int lives;
     private float height;
     private GameObject number;
+    private static final int MAX_LIVES = 4;
 
     public LifeHandler(GameObjectCollection gameObjectCollection, int lives, ImageReader imageReader, float height) {
         hearts = new GameObject[lives];
@@ -47,7 +48,7 @@ public class LifeHandler {
 
     private GameObject createSingleHeart(Vector2 topLeftCorner, Vector2 heartDimensions) {
         Renderable heartImage = imageReader.readImage("assets/heart.png", true);
-        GameObject heart = new GameObject(topLeftCorner, heartDimensions, heartImage);
+        Heart heart = new Heart(topLeftCorner, heartDimensions, heartImage, this);
         gameObjectCollection.addGameObject(heart, Layer.UI);
         return heart;
 
@@ -69,11 +70,18 @@ public class LifeHandler {
     }
 
     public void setLives(int lives) {
+        if (lives > MAX_LIVES){
+            return;
+        }
         gameObjectCollection.removeGameObject(number,Layer.UI);
         deleteAllHearts();
         this.lives = lives;
+        this.hearts = new GameObject[lives];
         createNumber();
         createAllHearts();
 
+    }
+    public int getLives(){
+        return lives;
     }
 }
