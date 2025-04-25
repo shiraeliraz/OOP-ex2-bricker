@@ -16,6 +16,7 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
     private final Vector2 PADDLE_DIMENSIONS = new Vector2(100, 15);
+    private ExtraPaddle extraPaddle;
 
     public ExtraPaddleStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter, Vector2 windowDimensions, UserInputListener inputListener, ImageReader imageReader) {
         super(gameObjectCollection, brickCounter);
@@ -24,14 +25,31 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
         this.windowDimensions = windowDimensions;
         this.inputListener = inputListener;
         this.imageReader = imageReader;
+        createExtraPaddle();
+    }
+
+    private boolean checkIfExtraPaddleExists() {
+        for (GameObject gameObject : gameObjectCollection) {
+            if (gameObject == extraPaddle) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
         super.onCollision(gameObject1, gameObject2);
+        if (!checkIfExtraPaddleExists()) {
+            gameObjectCollection.addGameObject(extraPaddle);
+        }
+    }
+
+    private void createExtraPaddle() {
         Vector2 extraPaddleCenter = new Vector2(windowDimensions.x() / 2, windowDimensions.y() / 2);
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
         ExtraPaddle extraPaddle = new ExtraPaddle(Vector2.ZERO, PADDLE_DIMENSIONS, paddleImage, inputListener, windowDimensions, gameObjectCollection);
-
+        extraPaddle.setCenter(extraPaddleCenter);
+        this.extraPaddle = extraPaddle;
     }
 }

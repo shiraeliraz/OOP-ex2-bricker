@@ -35,12 +35,14 @@ public class Paddle extends GameObject {
     public void update(float deltaTime) {
         super.update(deltaTime);
         Vector2 movementDir = Vector2.ZERO;
-        if (getTopLeftCorner().x() <= WALL_WIDTH){
-            movementDir = movementDir.add(Vector2.RIGHT);
+        if (getTopLeftCorner().x() <= WALL_WIDTH + 1){
+//            movementDir = movementDir.add(Vector2.RIGHT);
+            setTopLeftCorner(new Vector2(WALL_WIDTH + 1, this.getTopLeftCorner().y()));
         }
 
-        if (getTopLeftCorner().x() >= windowDimensions.x() - this.getDimensions().x() - WALL_WIDTH) {
-            movementDir = movementDir.add(Vector2.LEFT);
+        if (getTopLeftCorner().x() >= windowDimensions.x() - this.getDimensions().x() - WALL_WIDTH - 1) {
+//            movementDir = movementDir.add(Vector2.LEFT);
+            setTopLeftCorner(new Vector2(windowDimensions.x() - this.getDimensions().x() - WALL_WIDTH - 1, this.getTopLeftCorner().y()));
 
         }
 

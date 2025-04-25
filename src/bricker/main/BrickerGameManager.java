@@ -1,9 +1,6 @@
 package bricker.main;
 
-import bricker.brick_strategies.AddBallsCollisionStrategy;
-import bricker.brick_strategies.BasicCollisionStrategy;
-import bricker.brick_strategies.CollisionStrategy;
-import bricker.brick_strategies.ExtraLifeStrategy;
+import bricker.brick_strategies.*;
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Brick;
 import bricker.gameobjects.LifeHandler;
@@ -119,12 +116,15 @@ public class BrickerGameManager extends GameManager {
         // creating a brick strategy
         GameObjectCollection gameObjectCollection = this.gameObjects();
 //        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
-        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
+//        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
         //Place all bricks
 //        placeBricks(imageReader, basicCollisionStrategy);
 
-        ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
-        placeBricks(imageReader, extraLifeStrategy);
+//        ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
+//        placeBricks(imageReader, extraLifeStrategy);
+
+        ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
+        placeBricks(imageReader, extraPaddleStrategy);
 
     }
 

@@ -13,6 +13,7 @@ public class ExtraPaddle extends Paddle{
     private final GameObjectCollection gameObjectCollection;
     private int collisionCounter = 0;
 
+
     /**
      * Construct a new GameObject instance.
      *
@@ -35,17 +36,12 @@ public class ExtraPaddle extends Paddle{
     }
 
     @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        if (collisionCounter == 4) {
-            resetExtraPaddle();
-        }
-    }
-
-    @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         collisionCounter++;
+        if (collisionCounter == 4) {
+            resetExtraPaddle();
+        }
     }
 
 }
