@@ -42,8 +42,10 @@
         private Counter brickCounter = new Counter(0);
         private int remainingLives = 3;
         private ImageRenderable ballImage;
-        private boolean turboModeOn = false;
-//        private int turboCollisionCounter = -1;
+//        private boolean turboModeOn = false;
+//        private int turboCollisionCounter;
+        private ImageReader imageReader;
+//        private int turboCollisionCounter;
 
         public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
             super(windowTitle, windowDimensions);
@@ -107,6 +109,7 @@
             lifeHandler.createAllHearts();
             lifeHandler.setLives(remainingLives);
             this.inputListener = inputListener;
+            this.imageReader = imageReader;
 
             // creating ball
             createBall(imageReader, soundReader);
@@ -130,7 +133,7 @@
             ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
             placeBricks(imageReader, extraPaddleStrategy);
 
-//            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball, imageReader, this);
+//            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
 //            placeBricks(imageReader, turboCollisionStrategy);
 
         }
@@ -173,6 +176,7 @@
             ball.setCenter(windowDimensions.mult(0.5f));
             ball.renderer().setRenderable(ballImage);
             this.gameObjects().addGameObject(ball);
+            ball.setTag("Normal");
             Random random = new Random();
             float ballVelX = BALL_SPEED;
             float ballVelY = BALL_SPEED;
@@ -197,14 +201,9 @@
             }
         }
 
-//        public void setTurboCollisionCounter(int counter) {
-//            turboCollisionCounter = counter;
-//        }
-
         @Override
         public void update(float deltaTime) {
             super.update(deltaTime);
-//            updateTurboMode();
             if (remainingLives != lifeHandler.getLives()) {
                 remainingLives = lifeHandler.getLives();
             }
@@ -223,17 +222,22 @@
         }
 
 //        private void updateTurboMode() {
-//            if (ball.getTag().equals("Turbo Mode") && turboCollisionCounter != -1) {
-//                int current = ball.getCollisionCounter();
-//                if (current - turboCollisionCounter == 5) {
-//                    ball.setVelocity(ball.getVelocity().mult(1f / 1.4f));
-//                    ball.renderer().setRenderable(ballImage);
-//                    ball.setTag("Basic Mode");
-//                    turboCollisionCounter = -1;
-//                }
+//            if (ball.getTag().equals("Turbo Mode") && !turboModeOn) {
+//                turboCollisionCounter = ball.getCollisionCounter();
+//                ball.renderer().setRenderable(imageReader.readImage("assets/redBall.png", true));
+//                ball.setVelocity(ball.getVelocity().mult(1.4f));
+//                turboModeOn = true;
 //            }
 //        }
-
+//
+//        private void changeBackToBasic() {
+//            if (turboModeOn & turboCollisionCounter + 6 <= ball.getCollisionCounter()) {
+//                ball.renderer().setRenderable(ballImage);
+//                ball.setVelocity(ball.getVelocity().mult(1f/1.4f));
+//                turboModeOn = false;
+//                ball.setTag("Noraml");
+//            }
+//        }
 
         private void checkIfLost() {
             float ballHeight = ball.getCenter().y();
@@ -249,6 +253,7 @@
                 remainingLives = 3;
                 windowController.resetGame();
                 brickCounter = new Counter(0);
+                initBall();
 
             }
             else {
