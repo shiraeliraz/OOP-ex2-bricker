@@ -49,6 +49,6 @@ public class ExtraLifeStrategy extends BasicCollisionStrategy {
         gameObjectCollection.removeGameObject(gameObject1);
 //        brickCounter.decrement();
         createFallingHeart(topLeftCorner);
-        System.out.println("extra life: " + brickCounter.value());
+//        System.out.println("extra life: " + brickCounter.value());
     }
 }

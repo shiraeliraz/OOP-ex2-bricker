@@ -56,6 +56,6 @@ public class DoubleCollisionStrategy implements CollisionStrategy{
         if (collision3 != null) {
             collision3.onCollision(gameObject1, gameObject2);
         }
-        System.out.println("double: " + brickCounter.value());
+//        System.out.println("double: " + brickCounter.value());
     }
 }

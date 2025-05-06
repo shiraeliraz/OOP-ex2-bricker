@@ -17,7 +17,7 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
     private final Vector2 PADDLE_DIMENSIONS = new Vector2(100, 15);
-    private ExtraPaddle extraPaddle;
+    private static ExtraPaddle extraPaddle;
 
     public ExtraPaddleStrategy(BrickerGameManager brickerGameManager, GameObjectCollection gameObjectCollection,
                                Counter brickCounter, UserInputListener inputListener, ImageReader imageReader) {
@@ -53,6 +53,6 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
         ExtraPaddle extraPaddle = new ExtraPaddle(Vector2.ZERO, PADDLE_DIMENSIONS, paddleImage, inputListener, windowDimensions, gameObjectCollection);
         extraPaddle.setCenter(extraPaddleCenter);
         this.extraPaddle = extraPaddle;
-        System.out.println("extra paddle: " + brickCounter.value());
+//        System.out.println("extra paddle: " + brickCounter.value());
     }
 }

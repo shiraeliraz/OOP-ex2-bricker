@@ -43,6 +43,7 @@
         private int remainingLives = 3;
         private ImageRenderable ballImage;
         private ImageReader imageReader;
+        private StrategyFactory strategyFactory;
 
         public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
             super(windowTitle, windowDimensions);
@@ -85,18 +86,19 @@
 
         }
 
-        private void placeRow(ImageReader imageReader, CollisionStrategy collisionStrategy, float y) {
+        private void placeRow(ImageReader imageReader, float y) {
             float brickWidth = (windowDimensions.x() - WALL_WIDTH*2-(numberOfColumns+1)*GAP_WIDTH) / numberOfColumns;
             Vector2 topLeftCorner = new Vector2(WALL_WIDTH+GAP_WIDTH, y+WALL_WIDTH+GAP_WIDTH);
             Vector2 brickDimensions = new Vector2(brickWidth, 15);
             for (int i = 0; i < numberOfColumns; i++) {
-                createSingleBrick(topLeftCorner, brickDimensions,imageReader, collisionStrategy);
+                createSingleBrick(topLeftCorner, brickDimensions,imageReader);
                 topLeftCorner = topLeftCorner.add(new Vector2(brickWidth+GAP_WIDTH, 0));
                 brickCounter.increment();
             }
         }
 
-        private void createSingleBrick(Vector2 topLeftCorner, Vector2 brickDimensions, ImageReader imageReader, CollisionStrategy collisionStrategy) {
+        private void createSingleBrick(Vector2 topLeftCorner, Vector2 brickDimensions, ImageReader imageReader) {
+            CollisionStrategy collisionStrategy = strategyFactory.buildStrategyByProbability();
             Renderable brickImage = imageReader.readImage("assets/brick.png", false);
             Brick brick = new Brick(topLeftCorner, brickDimensions, brickImage, collisionStrategy);
             this.gameObjects().addGameObject(brick);
@@ -137,8 +139,7 @@
 //            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
 //            placeBricks(imageReader, turboCollisionStrategy);
             // GameObjectCollection gameObjectCollection, Counter brickCounter, BrickerGameManager brickerGameManager, UserInputListener userInputListener, ImageReader imageReader, Ball ball, SoundReader soundReader
-            StrategyFactory strategyFactory = new StrategyFactory(gameObjectCollection, brickCounter, this, inputListener, imageReader, ball, soundReader);
-//            DoubleCollisionStrategy doubleCollisionStrategy = new DoubleCollisionStrategy(strategyFactory, brickCounter);
+            this.strategyFactory = new StrategyFactory(gameObjectCollection, brickCounter, this, inputListener, imageReader, ball, soundReader);
             placeBricks(imageReader, strategyFactory);
 
         }
@@ -165,9 +166,7 @@
         private void placeBricks(ImageReader imageReader, StrategyFactory strategyFactory) {
             int y = GAP_WIDTH+WALL_WIDTH;
             for (int i = 0; i < numberOfRows; i++) {
-                System.out.println("placing the " + i + "th brick");
-                CollisionStrategy doubleCollision = new DoubleCollisionStrategy(strategyFactory, brickCounter);
-                placeRow(imageReader, doubleCollision,y);
+                placeRow(imageReader,y);
                 y+=BRICK_HEIGHT+GAP_WIDTH;
             }
         }

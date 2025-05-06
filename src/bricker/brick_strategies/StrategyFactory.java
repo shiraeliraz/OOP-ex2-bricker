@@ -7,6 +7,7 @@ import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.util.Counter;
+import java.util.Random;
 
 public class StrategyFactory {
     private final GameObjectCollection gameObjectCollection;
@@ -16,6 +17,7 @@ public class StrategyFactory {
     private final ImageReader imageReader;
     private final Ball ball;
     private final SoundReader soundReader;
+    private final Random random = new Random();
 
     public StrategyFactory(GameObjectCollection gameObjectCollection, Counter brickCounter, BrickerGameManager brickerGameManager, UserInputListener userInputListener, ImageReader imageReader, Ball ball, SoundReader soundReader) {
         this.gameObjectCollection = gameObjectCollection;
@@ -25,6 +27,26 @@ public class StrategyFactory {
         this.imageReader = imageReader;
         this.ball = ball;
         this.soundReader = soundReader;
+    }
+
+    public CollisionStrategy buildStrategyByProbability() {
+        int randomCollision = random.nextInt(10);
+        String strategyName;
+        if (randomCollision < 5) {
+            strategyName = "basic";
+        } else if (randomCollision == 5) {
+            strategyName = "addBalls";
+        } else if (randomCollision == 6) {
+            strategyName = "extraLife";
+        } else if (randomCollision == 7) {
+            strategyName = "extraPaddle";
+        } else if (randomCollision == 8) {
+            strategyName = "turbo";
+        } else {
+            strategyName = "double";
+        }
+        System.out.println("created " + strategyName);
+        return buildStrategy(strategyName);
     }
 
     public CollisionStrategy buildStrategy(String strategyName) {
@@ -39,6 +61,8 @@ public class StrategyFactory {
                 return new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
             case "double":
                 return new DoubleCollisionStrategy(this, brickCounter);
+            case "basic":
+                return new BasicCollisionStrategy(gameObjectCollection, brickCounter);
         }
         return null;
     }
