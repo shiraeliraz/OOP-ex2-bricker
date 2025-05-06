@@ -29,7 +29,7 @@ public class TurboCollisionStrategy extends BasicCollisionStrategy{
             return;
         }
         if (!ball.getTag().equals("Turbo Mode")) {
-            ball.setTag("Turbo Mode");
+            ball.turnOnTurbo();
         }
     }
 }

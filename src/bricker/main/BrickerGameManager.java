@@ -122,19 +122,19 @@
 
             // creating a brick strategy
             GameObjectCollection gameObjectCollection = this.gameObjects();
-    //        BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
-    //        AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
-            //Place all bricks
-    //        placeBricks(imageReader, basicCollisionStrategy);
+//            BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
+//            AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
+//            //Place all bricks
+//            placeBricks(imageReader, addBallsCollisionStrategy);
 
-            ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
-            placeBricks(imageReader, extraLifeStrategy);
+//            ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
+//            placeBricks(imageReader, extraLifeStrategy);
 
 //            ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
 //            placeBricks(imageReader, extraPaddleStrategy);
 
-//            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
-//            placeBricks(imageReader, turboCollisionStrategy);
+            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
+            placeBricks(imageReader, turboCollisionStrategy);
 
         }
 
@@ -144,7 +144,8 @@
             this.ballImage =
             imageReader.readImage("assets/ball.png", true);
             Sound collisionSound = soundReader.readSound("assets/blop.wav");
-            this.ball = new Ball(Vector2.ZERO, new Vector2(20,20), ballImage , collisionSound);
+            Renderable redBallImage = imageReader.readImage("assets/redball.png", true);
+            this.ball = new Ball(Vector2.ZERO, new Vector2(20,20), this.ballImage , collisionSound, redBallImage);
         }
 
         private void createBackground(ImageReader imageReader) {
@@ -176,7 +177,7 @@
             ball.setCenter(windowDimensions.mult(0.5f));
             ball.renderer().setRenderable(ballImage);
             this.gameObjects().addGameObject(ball);
-            ball.setTag("Normal");
+//            ball.turnOffTurbo();
             Random random = new Random();
             float ballVelX = BALL_SPEED;
             float ballVelY = BALL_SPEED;

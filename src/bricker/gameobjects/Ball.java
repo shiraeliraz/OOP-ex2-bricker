@@ -9,9 +9,10 @@ import danogl.util.Vector2;
 
 public class Ball extends GameObject {
     private final Sound collisionSound;
+    private final Renderable redBallImage;
+    private final Renderable renderable;
     private int collisionCounter = 0;
-
-
+    private int turboCounter = 6;
 
     /**
      * Construct a new GameObject instance.
@@ -23,15 +24,41 @@ public class Ball extends GameObject {
      *                       the GameObject will not be rendered.
      * @param collisionSound The collision sound of the ball
      */
-    public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound) {
+    public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound, Renderable redBallImage) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
+        this.redBallImage = redBallImage;
+        this.renderable = renderable;
+
+    }
+
+    private void turnOffTurbo() {
+        this.setTag("Basic Mode");
+        this.setVelocity(this.getVelocity().mult(1/1.40f));
+        turboCounter = 6;
+        this.renderer().setRenderable(renderable);
+    }
+
+    public void turnOnTurbo() {
+        this.setTag("Turbo Mode");
+        turboCounter = 6;
+        this.setVelocity(this.getVelocity().mult(1.40f));
+        this.renderer().setRenderable(redBallImage);
     }
 
     //Collisions
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
+        System.out.println(turboCounter);
+        if (this.getTag().equals("Turbo Mode")) {
+            turboCounter--;
+            if (turboCounter == 0) {
+                turnOffTurbo();
+                this.renderer().setRenderable(renderable);
+                System.out.println("Is in condition");
+            }
+        }
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
         setVelocity(newVel);
         collisionSound.play();

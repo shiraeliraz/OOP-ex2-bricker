@@ -33,7 +33,7 @@ public class AddBallsCollisionStrategy extends BasicCollisionStrategy{
     private void createPuck(Vector2 topLeftCorner) {
         Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        Ball ball = new Ball(topLeftCorner, puckDimensions, puckImage, collisionSound);
+        Ball ball = new Ball(topLeftCorner, puckDimensions, puckImage, collisionSound, null);
         gameObjectCollection.addGameObject(ball);
         initPuck(ball);
     }
