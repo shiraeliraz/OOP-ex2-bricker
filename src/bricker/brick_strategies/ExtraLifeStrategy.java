@@ -19,6 +19,7 @@ public class ExtraLifeStrategy implements CollisionStrategy {
     private final ImageReader imageReader;
     private Counter brickCounter;
     private BrickerGameManager brickerGameManager;
+    private Heart[] hearts;
 
     public ExtraLifeStrategy(GameObjectCollection gameObjectCollection, ImageReader imageReader,
                              Counter brickCounter, BrickerGameManager brickerGameManager) {
@@ -26,6 +27,7 @@ public class ExtraLifeStrategy implements CollisionStrategy {
         this.imageReader = imageReader;
         this.brickCounter = brickCounter;
         this.brickerGameManager = brickerGameManager;
+        this.hearts = new Heart[MAX_LIVES];
     }
 
     private void createFallingHeart(Vector2 topLeftCorner) {

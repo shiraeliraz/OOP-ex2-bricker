@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class Paddle extends GameObject {
 
     private static final float MOVEMENT_SPEED = 300f;
-    private final static String PADDLE_TAG = "paddle";
+    private final static String PADDLE_TAG = "Paddle";
     private static final int WALL_WIDTH = 5 ;
     private final UserInputListener inputListener;
     private final Vector2 windowDimensions;
@@ -36,12 +36,10 @@ public class Paddle extends GameObject {
         super.update(deltaTime);
         Vector2 movementDir = Vector2.ZERO;
         if (getTopLeftCorner().x() <= WALL_WIDTH + 1){
-//            movementDir = movementDir.add(Vector2.RIGHT);
             setTopLeftCorner(new Vector2(WALL_WIDTH + 1, this.getTopLeftCorner().y()));
         }
 
         if (getTopLeftCorner().x() >= windowDimensions.x() - this.getDimensions().x() - WALL_WIDTH - 1) {
-//            movementDir = movementDir.add(Vector2.LEFT);
             setTopLeftCorner(new Vector2(windowDimensions.x() - this.getDimensions().x() - WALL_WIDTH - 1, this.getTopLeftCorner().y()));
 
         }

@@ -28,6 +28,7 @@ public class ExtraPaddle extends Paddle{
     public ExtraPaddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, UserInputListener inputListener, Vector2 windowDimensions, GameObjectCollection gameObjectCollection) {
         super(topLeftCorner, dimensions, renderable, inputListener, windowDimensions);
         this.gameObjectCollection = gameObjectCollection;
+        this.setTag("ExtraPaddle");
     }
 
     private void resetExtraPaddle() {

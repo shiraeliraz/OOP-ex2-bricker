@@ -42,10 +42,7 @@
         private Counter brickCounter = new Counter(0);
         private int remainingLives = 3;
         private ImageRenderable ballImage;
-//        private boolean turboModeOn = false;
-//        private int turboCollisionCounter;
         private ImageReader imageReader;
-//        private int turboCollisionCounter;
 
         public BrickerGameManager(String windowTitle, Vector2 windowDimensions, int numberOfRows, int numberOfColumns) {
             super(windowTitle, windowDimensions);

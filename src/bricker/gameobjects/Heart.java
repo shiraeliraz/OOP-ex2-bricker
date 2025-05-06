@@ -35,7 +35,7 @@ public class Heart extends GameObject {
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        if (other instanceof Paddle) {
+        if (other.getTag().equals("Paddle")) {
             lifeHandler.setLives(lifeHandler.getLives()+1);
         }
     }

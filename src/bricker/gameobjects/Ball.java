@@ -9,7 +9,7 @@ import danogl.util.Vector2;
 public class Ball extends GameObject {
     private final Sound collisionSound;
     private final Renderable redBallImage;
-    private final Renderable greenBallImage;
+    private final Renderable renderable;
     private int collisionCounter = 0;
     private int turboCounter = 6;
     private boolean isTurbo = false;
@@ -20,15 +20,15 @@ public class Ball extends GameObject {
      * @param topLeftCorner  Position of the object, in window coordinates (pixels).
      *                       Note that (0,0) is the top-left corner of the window.
      * @param dimensions     Width and height in window coordinates.
-     * @param greenBallImage     The renderable representing the object. Can be null, in which case
+     * @param renderable     The renderable representing the object. Can be null, in which case
      *                       the GameObject will not be rendered.
      * @param collisionSound The collision sound of the ball
      */
-    public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable greenBallImage, Sound collisionSound, Renderable redBallImage) {
-        super(topLeftCorner, dimensions, greenBallImage);
+    public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound, Renderable redBallImage) {
+        super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
         this.redBallImage = redBallImage;
-        this.greenBallImage = greenBallImage;
+        this.renderable = renderable;
 
     }
 
@@ -36,7 +36,7 @@ public class Ball extends GameObject {
 //        this.setTag("Basic Mode");
         this.setVelocity(this.getVelocity().mult(1/1.40f));
         turboCounter = 6;
-        this.renderer().setRenderable(greenBallImage);
+        this.renderer().setRenderable(renderable);
         isTurbo = false;
     }
 
@@ -62,7 +62,7 @@ public class Ball extends GameObject {
             turboCounter--;
             if (turboCounter == 0) {
                 turnOffTurbo();
-                this.renderer().setRenderable(greenBallImage);
+                this.renderer().setRenderable(renderable);
             }
         }
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
