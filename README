@@ -1,0 +1,24 @@
+roni.shpitzer,shukka
+211823893,209823970
+
+1. We chose the option where we sent the gameObjects to the constructor of BasicCollisionStrategy, which every CollisionStrategy extends.
+Advantages:
+* Encapsulation: The logic related to object removal remains within the collision
+strategy itself. This promotes encapsulation and adheres to the Single
+Responsibility Principle, as the strategy handles both collision logic and its consequences.
+* Simplicity and Local Reasoning: Since the strategy directly accesses GameObjectCollection, it is easier to
+follow and test locally without needing to interact with the broader
+game manager class.
+Disadvantages:
+Disadvantages:
+* Breaks Abstraction Barrier:
+  Directly accessing and manipulating the GameObjectCollection from outside the
+  BrickerGameManager breaks its abstraction, because a brick shouldn't know all
+  the game objects of the game.
+
+* Reduced Flexibility for Game Flow Management:
+  If other classes depend on object removal, they won’t be notified if removal
+  is done directly by the strategy. Centralizing this logic in BrickerGameManager
+  would allow better control and coordination.
+
+2. We added
