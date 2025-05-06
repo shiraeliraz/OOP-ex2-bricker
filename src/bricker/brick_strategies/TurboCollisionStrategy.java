@@ -28,7 +28,9 @@ public class TurboCollisionStrategy extends BasicCollisionStrategy{
         if (gameObject2 != ball) {
             return;
         }
-        if (!ball.getTag().equals("Turbo Mode")) {
+        if (!ball.getTurbo()) {
+            System.out.println("Collision with a brick turbo mode");
+            ball.setTurbo(true);
             ball.turnOnTurbo();
         }
     }

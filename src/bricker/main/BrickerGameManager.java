@@ -125,7 +125,7 @@
 //            BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(gameObjectCollection, brickCounter);
 //            AddBallsCollisionStrategy addBallsCollisionStrategy = new AddBallsCollisionStrategy(gameObjectCollection, imageReader, soundReader, brickCounter);
 //            //Place all bricks
-//            placeBricks(imageReader, addBallsCollisionStrategy);
+//            placeBricks(imageReader, basicCollisionStrategy);
 
 //            ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
 //            placeBricks(imageReader, extraLifeStrategy);
@@ -159,8 +159,15 @@
 
         private void placeBricks(ImageReader imageReader, CollisionStrategy CollisionStrategy) {
             int y = GAP_WIDTH+WALL_WIDTH;
+            BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(this.gameObjects(), brickCounter);
             for (int i = 0; i < numberOfRows; i++) {
-                placeRow(imageReader, CollisionStrategy,y);
+                if (i > 3) {
+                    placeRow(imageReader, basicCollisionStrategy, y);
+                }
+                else {
+                    placeRow(imageReader, CollisionStrategy,y);
+
+                }
                 y+=BRICK_HEIGHT+GAP_WIDTH;
             }
         }
@@ -176,8 +183,9 @@
         private void initBall() {
             ball.setCenter(windowDimensions.mult(0.5f));
             ball.renderer().setRenderable(ballImage);
+            System.out.println("Change to green at" + System.currentTimeMillis());
             this.gameObjects().addGameObject(ball);
-//            ball.turnOffTurbo();
+            ball.turnOffTurbo();
             Random random = new Random();
             float ballVelX = BALL_SPEED;
             float ballVelY = BALL_SPEED;
@@ -221,24 +229,6 @@
             }
             destroyObjectsNotOnScreen();
         }
-
-//        private void updateTurboMode() {
-//            if (ball.getTag().equals("Turbo Mode") && !turboModeOn) {
-//                turboCollisionCounter = ball.getCollisionCounter();
-//                ball.renderer().setRenderable(imageReader.readImage("assets/redBall.png", true));
-//                ball.setVelocity(ball.getVelocity().mult(1.4f));
-//                turboModeOn = true;
-//            }
-//        }
-//
-//        private void changeBackToBasic() {
-//            if (turboModeOn & turboCollisionCounter + 6 <= ball.getCollisionCounter()) {
-//                ball.renderer().setRenderable(ballImage);
-//                ball.setVelocity(ball.getVelocity().mult(1f/1.4f));
-//                turboModeOn = false;
-//                ball.setTag("Noraml");
-//            }
-//        }
 
         private void checkIfLost() {
             float ballHeight = ball.getCenter().y();
