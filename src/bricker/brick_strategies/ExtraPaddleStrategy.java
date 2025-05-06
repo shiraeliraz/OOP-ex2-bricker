@@ -1,6 +1,7 @@
 package bricker.brick_strategies;
 
 import bricker.gameobjects.ExtraPaddle;
+import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.gui.ImageReader;
@@ -18,11 +19,12 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
     private final Vector2 PADDLE_DIMENSIONS = new Vector2(100, 15);
     private ExtraPaddle extraPaddle;
 
-    public ExtraPaddleStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter, Vector2 windowDimensions, UserInputListener inputListener, ImageReader imageReader) {
+    public ExtraPaddleStrategy(BrickerGameManager brickerGameManager, GameObjectCollection gameObjectCollection,
+                               Counter brickCounter, UserInputListener inputListener, ImageReader imageReader) {
         super(gameObjectCollection, brickCounter);
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
-        this.windowDimensions = windowDimensions;
+        this.windowDimensions = brickerGameManager.getWindowDimensions();
         this.inputListener = inputListener;
         this.imageReader = imageReader;
         createExtraPaddle();

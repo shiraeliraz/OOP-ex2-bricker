@@ -67,6 +67,10 @@
             return lifeHandler;
         }
 
+        public Vector2 getWindowDimensions(){
+            return windowDimensions;
+        }
+
         private void createWalls(Vector2 windowDimensions) { // why is it public?
             Color pink = new Color(225, 120, 140);
             Renderable rectangle = new RectangleRenderable(pink);
