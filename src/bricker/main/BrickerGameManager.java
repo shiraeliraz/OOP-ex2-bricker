@@ -134,8 +134,12 @@
 //            ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
 //            placeBricks(imageReader, extraPaddleStrategy);
 
-            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
-            placeBricks(imageReader, turboCollisionStrategy);
+//            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
+//            placeBricks(imageReader, turboCollisionStrategy);
+            // GameObjectCollection gameObjectCollection, Counter brickCounter, BrickerGameManager brickerGameManager, UserInputListener userInputListener, ImageReader imageReader, Ball ball, SoundReader soundReader
+            StrategyFactory strategyFactory = new StrategyFactory(gameObjectCollection, brickCounter, this, inputListener, imageReader, ball, soundReader);
+            DoubleCollisionStrategy doubleCollisionStrategy = new DoubleCollisionStrategy(strategyFactory);
+            placeBricks(imageReader, doubleCollisionStrategy);
 
         }
 
@@ -160,15 +164,8 @@
 
         private void placeBricks(ImageReader imageReader, CollisionStrategy CollisionStrategy) {
             int y = GAP_WIDTH+WALL_WIDTH;
-            BasicCollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(this.gameObjects(), brickCounter);
             for (int i = 0; i < numberOfRows; i++) {
-                if (i > 3) {
-                    placeRow(imageReader, basicCollisionStrategy, y);
-                }
-                else {
-                    placeRow(imageReader, CollisionStrategy,y);
-
-                }
+                placeRow(imageReader, CollisionStrategy,y);
                 y+=BRICK_HEIGHT+GAP_WIDTH;
             }
         }
@@ -184,7 +181,6 @@
         private void initBall() {
             ball.setCenter(windowDimensions.mult(0.5f));
             ball.renderer().setRenderable(ballImage);
-            System.out.println("Change to green at" + System.currentTimeMillis());
             this.gameObjects().addGameObject(ball);
             ball.turnOffTurbo();
             Random random = new Random();

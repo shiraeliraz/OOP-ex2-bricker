@@ -57,7 +57,7 @@ public class Ball extends GameObject {
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        System.out.println(turboCounter);
+//        System.out.println(turboCounter);
         if (isTurbo) {
             turboCounter--;
             if (turboCounter == 0) {
