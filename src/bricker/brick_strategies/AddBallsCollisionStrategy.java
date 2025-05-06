@@ -48,6 +48,7 @@ public class AddBallsCollisionStrategy extends BasicCollisionStrategy{
     @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
         super.onCollision(gameObject1, gameObject2);
+        System.out.println("add balls collision: " + counter.value());
         Vector2 puckTopLeftCorner = gameObject1.getCenter();
         createPuck(puckTopLeftCorner);
         createPuck(puckTopLeftCorner);

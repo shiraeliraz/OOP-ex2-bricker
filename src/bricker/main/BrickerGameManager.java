@@ -138,8 +138,8 @@
 //            placeBricks(imageReader, turboCollisionStrategy);
             // GameObjectCollection gameObjectCollection, Counter brickCounter, BrickerGameManager brickerGameManager, UserInputListener userInputListener, ImageReader imageReader, Ball ball, SoundReader soundReader
             StrategyFactory strategyFactory = new StrategyFactory(gameObjectCollection, brickCounter, this, inputListener, imageReader, ball, soundReader);
-            DoubleCollisionStrategy doubleCollisionStrategy = new DoubleCollisionStrategy(strategyFactory);
-            placeBricks(imageReader, doubleCollisionStrategy);
+//            DoubleCollisionStrategy doubleCollisionStrategy = new DoubleCollisionStrategy(strategyFactory, brickCounter);
+            placeBricks(imageReader, strategyFactory);
 
         }
 
@@ -162,10 +162,12 @@
             background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         }
 
-        private void placeBricks(ImageReader imageReader, CollisionStrategy CollisionStrategy) {
+        private void placeBricks(ImageReader imageReader, StrategyFactory strategyFactory) {
             int y = GAP_WIDTH+WALL_WIDTH;
             for (int i = 0; i < numberOfRows; i++) {
-                placeRow(imageReader, CollisionStrategy,y);
+                System.out.println("placing the " + i + "th brick");
+                CollisionStrategy doubleCollision = new DoubleCollisionStrategy(strategyFactory, brickCounter);
+                placeRow(imageReader, doubleCollision,y);
                 y+=BRICK_HEIGHT+GAP_WIDTH;
             }
         }

@@ -38,7 +38,7 @@ public class StrategyFactory {
             case "turbo":
                 return new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
             case "double":
-                return new DoubleCollisionStrategy(this);
+                return new DoubleCollisionStrategy(this, brickCounter);
         }
         return null;
     }

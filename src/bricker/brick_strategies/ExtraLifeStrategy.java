@@ -10,7 +10,7 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Counter;
 import danogl.util.Vector2;
 
-public class ExtraLifeStrategy implements CollisionStrategy {
+public class ExtraLifeStrategy extends BasicCollisionStrategy {
 
     private static final float HEART_SIZE = 20f;
     private static final int FALL_SPEED = 100;
@@ -23,6 +23,7 @@ public class ExtraLifeStrategy implements CollisionStrategy {
 
     public ExtraLifeStrategy(GameObjectCollection gameObjectCollection, ImageReader imageReader,
                              Counter brickCounter, BrickerGameManager brickerGameManager) {
+        super(gameObjectCollection, brickCounter);
         this.gameObjectCollection = gameObjectCollection;
         this.imageReader = imageReader;
         this.brickCounter = brickCounter;
@@ -39,13 +40,15 @@ public class ExtraLifeStrategy implements CollisionStrategy {
 
     @Override
     public void onCollision(GameObject gameObject1, GameObject gameObject2) {
+        super.onCollision(gameObject1, gameObject2);
         if (brickerGameManager.getLives() >= MAX_LIVES){
             gameObjectCollection.removeGameObject(gameObject1);
             return;
         }
         Vector2 topLeftCorner = gameObject1.getCenter();
         gameObjectCollection.removeGameObject(gameObject1);
-        brickCounter.decrement();
+//        brickCounter.decrement();
         createFallingHeart(topLeftCorner);
+        System.out.println("extra life: " + brickCounter.value());
     }
 }

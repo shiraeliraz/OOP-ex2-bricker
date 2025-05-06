@@ -53,5 +53,6 @@ public class ExtraPaddleStrategy extends BasicCollisionStrategy{
         ExtraPaddle extraPaddle = new ExtraPaddle(Vector2.ZERO, PADDLE_DIMENSIONS, paddleImage, inputListener, windowDimensions, gameObjectCollection);
         extraPaddle.setCenter(extraPaddleCenter);
         this.extraPaddle = extraPaddle;
+        System.out.println("extra paddle: " + brickCounter.value());
     }
 }

@@ -11,11 +11,12 @@ import danogl.util.Vector2;
 
 public class TurboCollisionStrategy extends BasicCollisionStrategy{
     private final Ball ball;
-
+    protected Counter brickCounter;
 
     public TurboCollisionStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter, Ball ball) {
         super(gameObjectCollection, brickCounter);
         this.ball = ball;
+        this.brickCounter = brickCounter;
     }
 
     @Override
@@ -25,7 +26,7 @@ public class TurboCollisionStrategy extends BasicCollisionStrategy{
             return;
         }
         if (!ball.getTurbo()) {
-            System.out.println("Collision with a brick turbo mode");
+            System.out.println("turbo mode: " + brickCounter.value());
             ball.setTurbo(true);
             ball.turnOnTurbo();
         }
