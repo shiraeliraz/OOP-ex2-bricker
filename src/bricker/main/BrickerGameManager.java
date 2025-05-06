@@ -127,11 +127,11 @@
             //Place all bricks
     //        placeBricks(imageReader, basicCollisionStrategy);
 
-//            ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
-//            placeBricks(imageReader, extraLifeStrategy);
+            ExtraLifeStrategy extraLifeStrategy = new ExtraLifeStrategy(gameObjectCollection, imageReader, brickCounter, this);
+            placeBricks(imageReader, extraLifeStrategy);
 
-            ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
-            placeBricks(imageReader, extraPaddleStrategy);
+//            ExtraPaddleStrategy extraPaddleStrategy = new ExtraPaddleStrategy(gameObjects(), brickCounter, windowDimensions, inputListener, imageReader);
+//            placeBricks(imageReader, extraPaddleStrategy);
 
 //            TurboCollisionStrategy turboCollisionStrategy = new TurboCollisionStrategy(gameObjectCollection, brickCounter, ball);
 //            placeBricks(imageReader, turboCollisionStrategy);
