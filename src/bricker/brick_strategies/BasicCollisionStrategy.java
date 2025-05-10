@@ -2,23 +2,40 @@ package bricker.brick_strategies;
 
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.util.Counter;
 
-public class BasicCollisionStrategy implements CollisionStrategy {
-    private final String COLLISION_MESSAGE = "collision with brick detected";
-    private final GameObjectCollection gameObjectCollection;
-    private final Counter brickCounter;
+/**
+ * A basic collision strategy that removes the brick from the game and decreases the brick counter.
+ * @author - roni.shpitzer,shukka
+ */
 
-    public BasicCollisionStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter) {
-        this.gameObjectCollection = gameObjectCollection;
-        this.brickCounter = brickCounter;
-    }
-    @Override
-    public void onCollision(GameObject gameObject1, GameObject gameObject2) {
-//        System.out.println(COLLISION_MESSAGE);
-        System.out.println(brickCounter.value());
-        if (gameObjectCollection.removeGameObject(gameObject1)) {
-            brickCounter.decrement();
-        }
-    }
+public class BasicCollisionStrategy implements CollisionStrategy {
+	private final GameObjectCollection gameObjectCollection;
+	private final Counter brickCounter;
+
+
+	/**
+	 * Constructor for the BasicCollisionStrategy.
+	 *
+	 * @param gameObjectCollection - The game object collection from which bricks will be removed.
+	 * @param brickCounter         - A counter tracking the number of bricks in the game.
+	 */
+	public BasicCollisionStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter) {
+		this.gameObjectCollection = gameObjectCollection;
+		this.brickCounter = brickCounter;
+	}
+
+	/**
+	 * Handles a collision by removing the brick from the game object collection.
+	 *
+	 * @param gameObject1 - The brick that was hit.
+	 * @param gameObject2 - The object that hit the brick.
+	 */
+	@Override
+	public void onCollision(GameObject gameObject1, GameObject gameObject2) {
+		if (gameObjectCollection.removeGameObject(gameObject1, Layer.STATIC_OBJECTS)) {
+			brickCounter.decrement();
+		}
+	}
 }
